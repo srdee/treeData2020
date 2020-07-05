@@ -3,6 +3,9 @@ import pytz
 import datetime as dt
 import sys
 
+est = pytz.timezone('US/Eastern')
+utc = pytz.utc
+
 loadFile = sys.argv[1]
 tiltFile = sys.argv[2]
 
@@ -25,6 +28,11 @@ dfLoads['dateTimeObject'] = dfLoads.apply(lambda x: dt.datetime.combine(x.dateOb
 #WORK WITH TILTS
 #Find mode
 dfTilts['tiltMode160ch5'] = dfTilts['12160:ch5'].apply(lambda x: dfTilts['12160:ch5'].mode())
+
+#create dateTime object from Time and change to est
+dfTilts['dateTimeObject'] = dfTilts['Time'].apply(lambda x: dt.datetime.strptime( x[:-10].replace('/20 ','/2020'),'%m/%d/%Y%H:%M:%S').replace(tzinfo=utc).astimezone(est))
+
+#change to EDT
 
 #OUTPUT DATA
 #write excel file with different dataframes on different sheets
