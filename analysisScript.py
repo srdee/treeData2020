@@ -35,7 +35,11 @@ dfTilts['dateTimeObject'] = dfTilts['Time'].apply(lambda x: dt.datetime.strptime
 #make dateTime object timezone unaware for Excel
 dfTilts['dateTimeObject'] = dfTilts['dateTimeObject'].apply(lambda x: x.tz_localize(None))
 
-#change to EDT
+#change time to EST as string
+dfTilts['Time'] = dfTilts['dateTimeObject'].apply(lambda x: str(x)[11:])
+
+#add Date
+dfTilts['Date'] = dfTilts['dateTimeObject'].apply(lambda x: str(x)[:10])
 
 #OUTPUT DATA
 #write excel file with different dataframes on different sheets
@@ -48,10 +52,6 @@ for sheet_name in dfs.keys():
 writer.save()
 
 print('File ' + loadFile[:-4] + tiltFile[:-4] +'.xlsx' + ' successfully created')
-
-
-
-
 
 
 
