@@ -19,8 +19,12 @@ dfLoads['ElapsedSeconds'] = dfLoads['Elapsed mS'].apply(lambda x:x/1000)
 #create date object 
 dfLoads['dateObject'] = dfLoads['Date'].apply(lambda x: dt.datetime.strptime("-".join(x.split('/')[::-1]), "%Y-%d-%m"))
 
+#get rid of AM from Time
+
+dfLoads['Time'] = dfLoads['Time'].apply(lambda x: x[:-3])
+
 #strip AM from Time by removing three characters from string, register as time
-dfLoads['timeObject'] = dfLoads['Time'].apply(lambda x: dt.datetime.strptime(x[:-3], "%H:%M:%S"))
+dfLoads['timeObject'] = dfLoads['Time'].apply(lambda x: dt.datetime.strptime(x, "%H:%M:%S"))
 
 #create dateTime object that can be manipulated
 dfLoads['dateTimeObject'] = dfLoads.apply(lambda x: dt.datetime.combine(x.dateObject, x.timeObject.time()), axis=1)
@@ -38,7 +42,7 @@ dfTilts['dateTimeObject'] = dfTilts['dateTimeObject'].apply(lambda x: x.tz_local
 #change time to EST as string
 dfTilts['Time'] = dfTilts['dateTimeObject'].apply(lambda x: str(x)[11:])
 
-#add Date
+#add date to tilts
 dfTilts['Date'] = dfTilts['dateTimeObject'].apply(lambda x: str(x)[:10])
 
 #OUTPUT DATA
