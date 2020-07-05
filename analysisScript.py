@@ -32,6 +32,9 @@ dfTilts['tiltMode160ch5'] = dfTilts['12160:ch5'].apply(lambda x: dfTilts['12160:
 #create dateTime object from Time and change to est
 dfTilts['dateTimeObject'] = dfTilts['Time'].apply(lambda x: dt.datetime.strptime( x[:-10].replace('/20 ','/2020'),'%m/%d/%Y%H:%M:%S').replace(tzinfo=utc).astimezone(est))
 
+#make dateTime object timezone unaware for Excel
+dfTilts['dateTimeObject'] = dfTilts['dateTimeObject'].apply(lambda x: x.tz_localize(None))
+
 #change to EDT
 
 #OUTPUT DATA
@@ -45,6 +48,10 @@ for sheet_name in dfs.keys():
 writer.save()
 
 print('File ' + loadFile[:-4] + tiltFile[:-4] +'.xlsx' + ' successfully created')
+
+
+
+
 
 
 
